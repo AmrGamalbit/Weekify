@@ -9,7 +9,7 @@ import base64
 
 deafult_color = "#31333f"
 st.set_page_config(
-    page_title="Planner",
+    page_title="Weekify",
     page_icon= "🗃️",
     initial_sidebar_state="collapsed",
     menu_items={
@@ -22,7 +22,7 @@ st.set_page_config(
 acv_data_path = os.path.join(os.getcwd(), "data", "acv.csv")
 sess_data_path = os.path.join(os.getcwd(), "data", "sess.csv")
 free_hours_path = os.path.join(os.getcwd(), "data", "free_hours.csv")
-st.title("Planner")
+st.title("Weekify 🗃️")
 
 st.header("Add Category")
 days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -84,7 +84,7 @@ else:
 # Create and display activity form
 with st.form(key="activity_form"):
     activity = st.text_input("Enter your activity")
-    num_of_hours = st.number_input("How much weekly hours?", step=0.10)
+    num_of_hours = st.number_input("How much weekly hours?", step=0.5)
     submit_btn = st.form_submit_button()
     if submit_btn:
         df_acv.loc[len(df_acv)] = [activity, num_of_hours]
@@ -110,19 +110,19 @@ df_grouped = edited_sess_df.groupby("Activity", as_index=False).agg({"Total Hour
 if not df_grouped.empty:
     for index, row in edited_acv_df.iterrows():
         matched = df_grouped[df_grouped.Activity == row["Activity"]]
-        try:
-            total_hours = matched["Total Hours"].iloc[0]
-        except IndexError:
-            continue
+        st.write(matched)
+        total_hours = matched["Total Hours"].iloc[0]
 
         remaining = row["Hours"] - total_hours
         st.metric(label=row["Activity"], value=remaining)
-        st.write(matched)
 
 st.divider()
 
 # Display the hours required to balance free hours with required hours
-st.subheader(f"Total Hours need to free this week {all_hours}")
+if not df_acv.empty:
+    all_hours = df_acv["Hours"].sum()
+    st.subheader(f"Total Hours need to free this week {all_hours}")
+
 edited = st.data_editor(df_days)
 save_changes = st.button("save_changes")
 if save_changes:
@@ -130,7 +130,9 @@ if save_changes:
     edited_sess_df.to_csv(sess_data_path, index=False)
     edited_acv_df.to_csv(acv_data_path, index=False)
 
-st.subheader(f"Remaning hours {all_hours - edited["Hours"].sum()}")
+if not df_acv.empty:
+    st.subheader(f"Remaning hours {all_hours - edited["Hours"].sum()}")
+
 st.divider()
 
 # Create and display the weekly plan
