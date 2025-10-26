@@ -16,3 +16,4 @@ Weekify is a smart weekly planning tool that helps you distribute study or work 
 - ✅ **Customize your experience** with:
   - Start day of the week  
   - Background image (sidebar customization)  
+![Uploading localhost_8501_ (4).png…]()
