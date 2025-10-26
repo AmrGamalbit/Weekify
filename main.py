@@ -19,9 +19,9 @@ st.set_page_config(
 )
 
 
-acv_data_path = os.path.join(os.getcwd(), "static", "acv.csv")
-sess_data_path = os.path.join(os.getcwd(), "static", "sess.csv")
-free_hours_path = os.path.join(os.getcwd(), "static", "free_hours.csv")
+acv_data_path = os.path.join(os.getcwd(), "data", "acv.csv")
+sess_data_path = os.path.join(os.getcwd(), "data", "sess.csv")
+free_hours_path = os.path.join(os.getcwd(), "data", "free_hours.csv")
 st.title("Planner")
 
 st.header("Add Category")
